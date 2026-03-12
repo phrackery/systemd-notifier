@@ -9,7 +9,10 @@ Type=simple
 Restart=on-failure
 RestartSec=5
 
-# Environment variables (will be loaded from config file)
+# Pass environment from systemd user session (critical for XDG_SESSION_ID)
+PassEnvironment=XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR
+
+# Environment variables
 Environment="PYTHONUNBUFFERED=1"
 
 # Working directory

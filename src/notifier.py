@@ -506,7 +506,8 @@ class SystemEventMonitor:
     def _subscribe_to_signals(self) -> None:
         """Subscribe to D-Bus signals"""
         # Get session ID for lock/unlock signals
-        session_id = os.environ.get('XDG_SESSION_ID', '').replace('_', '')
+        # IMPORTANT: Do NOT strip underscores! Session IDs like "_32" need the underscore
+        session_id = os.environ.get('XDG_SESSION_ID', '')
         
         # Subscribe to PrepareForSleep
         sub_id = self.bus.signal_subscribe(
@@ -534,7 +535,26 @@ class SystemEventMonitor:
         
         # Subscribe to Lock/Unlock signals if we have a session ID
         if session_id:
-            session_path = f"/org/freedesktop/login1/session/{session_id}"
+            # Query logind to get the actual session object path
+            # Session ID (e.g., "2") maps to different object path (e.g., "/org/freedesktop/login1/session/_32")
+            try:
+                result = self.bus.call_sync(
+                    "org.freedesktop.login1",
+                    "/org/freedesktop/login1",
+                    "org.freedesktop.login1.Manager",
+                    "GetSession",
+                    GLib.Variant("(s)", (session_id,)),
+                    GLib.VariantType("(o)"),
+                    Gio.DBusCallFlags.NONE,
+                    -1,
+                    None
+                )
+                session_path = result.unpack()[0]
+                logging.info(f"Session {session_id} -> D-Bus path: {session_path}")
+            except Exception as e:
+                # Fallback to default path construction
+                session_path = f"/org/freedesktop/login1/session/{session_id}"
+                logging.warning(f"Could not query session path from logind: {e}. Using fallback: {session_path}")
             
             sub_id = self.bus.signal_subscribe(
                 "org.freedesktop.login1",
