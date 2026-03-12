@@ -249,6 +249,22 @@ Ensure config file has correct permissions:
 chmod 600 ~/.config/systemd-notifier/config.env
 ```
 
+### Lock/unlock detection not working
+
+If you see `WARNING:root:XDG_SESSION_ID not set, lock/unlock monitoring unavailable`, the notifier can't detect screen lock events (sleep/shutdown still work fine).
+
+**Quick fix:**
+```bash
+# Find your session ID
+loginctl list-sessions
+
+# Set it (replace X with your session number)
+export XDG_SESSION_ID=X
+./src/notifier.py
+```
+
+See [INSTALL.md](INSTALL.md) for detailed troubleshooting.
+
 ## Compatibility
 
 ✅ Ubuntu 18.04, 20.04, 22.04, 24.04  

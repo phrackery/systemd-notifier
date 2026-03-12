@@ -221,6 +221,42 @@ ls -la ~/.config/systemd-notifier/config.env
 
 Should be readable by your user (mode 600).
 
+### Lock/unlock monitoring unavailable
+
+If you see the warning: `WARNING:root:XDG_SESSION_ID not set, lock/unlock monitoring unavailable`
+
+**Cause:** The notifier can't detect your desktop session ID, which is required to monitor screen lock/unlock events.
+
+**Solution:**
+
+1. **Find your session ID:**
+```bash
+loginctl list-sessions
+```
+
+2. **Set the environment variable:**
+```bash
+export XDG_SESSION_ID=<your_session_number>
+```
+
+For example, if your session ID is `2`:
+```bash
+export XDG_SESSION_ID=2
+./src/notifier.py
+```
+
+3. **To make it permanent**, add to your shell profile:
+```bash
+# Get your session ID and add it to .bashrc
+SESSION_ID=$(loginctl list-sessions | grep "$(whoami)" | grep "seat" | awk '{print $1}')
+echo "export XDG_SESSION_ID=$SESSION_ID" >> ~/.bashrc
+source ~/.bashrc
+```
+
+4. **When running as a systemd service**, this is handled automatically since systemd starts the service within your desktop session.
+
+**Note:** Sleep, shutdown, and wake notifications will still work even without XDG_SESSION_ID set. Only lock/unlock monitoring requires it.
+
 ## Configuration Options
 
 Edit `~/.config/systemd-notifier/config.env` to customize:
