@@ -1,0 +1,30 @@
+[Unit]
+Description=Systemd Notifier - Telegram notifications for system events
+Documentation=https://github.com/yourusername/systemd-notifier
+After=graphical-session.target
+Wants=graphical-session.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+
+# Environment variables (will be loaded from config file)
+Environment="PYTHONUNBUFFERED=1"
+
+# Working directory
+WorkingDirectory=%h/.local/share/systemd-notifier
+
+# Execute the notifier
+ExecStart=%h/.local/share/systemd-notifier/src/notifier.py
+
+# Standard output and error logging
+StandardOutput=journal
+StandardError=journal
+
+# Resource limits
+MemoryMax=128M
+CPUQuota=10%
+
+[Install]
+WantedBy=default.target
