@@ -289,14 +289,21 @@ Requires:
 
 ## Future Enhancements
 
-Potential features for future versions:
-- [ ] Windows support (via Win32 API)
-- [ ] macOS support (via NSWorkspace notifications)
-- [ ] Multiple notification backends (Discord, Slack, email)
+See [ROADMAP.md](ROADMAP.md) for the complete feature roadmap, including:
+- Discord/Slack notification backends
+- Battery level monitoring
+- Network connectivity events
+- Quiet hours / Do Not Disturb
+- Windows and macOS support
+- And more!
+
+**Quick preview of upcoming features:**
+- [ ] Discord/Slack notification backends
+- [ ] Battery level monitoring (for laptops)
+- [x] Network connectivity events
+- [ ] Quiet hours / Do Not Disturb mode
 - [ ] GUI configuration tool
-- [ ] Battery level monitoring
-- [ ] Network connectivity events
-- [ ] Custom scripts per event
+- [ ] Windows and macOS support
 
 ## Contributing
 

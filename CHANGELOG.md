@@ -31,11 +31,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Custom Scripts**: Execute your own commands when events occur (async, non-blocking)
+  - Environment variables passed: EVENT_TYPE, EVENT_HOSTNAME, EVENT_TIMESTAMP, EVENT_MESSAGE
+  - Scripts configured per event: CUSTOM_SCRIPT_LOCK, CUSTOM_SCRIPT_UNLOCK, etc.
+- **Notification Templates**: Customize Telegram message format with HTML support
+  - Variables: {emoji}, {event_type}, {hostname}, {timestamp}, {message}
+  - Multiple template examples provided in example.env
+- **CLI Commands**: New command-line interface for testing and status
+  - `notifier.py --test` - Send a test notification to verify configuration
+  - `notifier.py --status` - Show configuration and service status
+  - `notifier.py --version` - Show version information
+
 ### Planned
 - Windows support via Win32 API
 - macOS support via NSWorkspace
-- Discord/Slack notification backends
+- Slack notification backend
 - GUI configuration tool
 - Battery level monitoring
-- Network connectivity events
+- Quiet hours (do not disturb)
+
+### Completed
+- [x] Discord notification backend
+- [x] Network connectivity events (WiFi, VPN, Ethernet, Internet)
 
